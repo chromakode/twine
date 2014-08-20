@@ -1,0 +1,40 @@
+{
+  "name": "twine",
+  "version": "0.0.1",
+  "description": "A real-time collaborative looper.",
+  "main": "loopre.jsx",
+  "dependencies": {
+    "events": "~1.0.1",
+    "ivy-client": "*",
+    "lodash": "~2.4.1",
+    "node-uuid": "~1.4.1",
+    "base64-arraybuffer": "~0.1.2",
+    "bluebird": "~2.3.0"
+  },
+  "devDependencies": {
+    "browserify": "~5.10.0",
+    "watchify": "~1.0.2",
+    "reactify": "~0.14.0",
+    "envify": "~3.0.0",
+    "gulp": "~3.8.7",
+    "merge-stream": "~0.1.5",
+    "vinyl-source-stream": "~0.1.1",
+    "gulp-less": "~1.3.3",
+    "gulp-uglify": "~0.3.1",
+    "gulp-streamify": "~0.0.5"
+  },
+  "author": {
+    "name": "Max Goodman",
+    "email": "c@chromakode.com"
+  },
+  "license": "BSD",
+  "scripts": {
+    "develop": "watchify src/index.js -o build/loopre.min.js -v"
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
+  }
+}

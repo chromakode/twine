@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- from https://github.com/CodeCharmLtd/Font-Awesome-SVG-PNG -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="2048"
+   height="2048"
+   viewBox="-192 -384 2048 2048"
+   id="svg3022"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="metronome.svg">
+  <metadata
+     id="metadata3032">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+        <dc:source />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>chromakode</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3030" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1729"
+     inkscape:window-height="1030"
+     id="namedview3028"
+     showgrid="false"
+     inkscape:snap-global="false"
+     inkscape:snap-bbox="true"
+     inkscape:snap-page="true"
+     inkscape:zoom="0.1767767"
+     inkscape:cx="-170.26824"
+     inkscape:cy="1074.1159"
+     inkscape:window-x="106"
+     inkscape:window-y="74"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3022">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3988"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <path
+     style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:165;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     d="M 887.9375 0 A 82.50825 82.50825 0 0 0 808.75 59.4375 L 338.96875 1673.4375 A 82.50825 82.50825 0 0 0 335.6875 1696.5 L 335.6875 1965.5 A 82.50825 82.50825 0 0 0 418.1875 2048 L 1629.8125 2048 A 82.50825 82.50825 0 0 0 1712.3125 1965.5 L 1712.3125 1696.5 A 82.50825 82.50825 0 0 0 1709.0312 1673.4375 L 1239.25 59.4375 A 82.50825 82.50825 0 0 0 1160.0625 0 L 887.9375 0 z M 968.46875 241.125 L 1079.5312 241.125 A 82.50825 82.50825 0 0 1 1159.9062 305.03125 L 1385.5938 1281.5312 A 82.50825 82.50825 0 0 1 1305.2188 1382.625 L 742.78125 1382.625 A 82.50825 82.50825 0 0 1 662.40625 1281.5312 L 888.09375 305.03125 A 82.50825 82.50825 0 0 1 968.46875 241.125 z "
+     transform="translate(-192,-384)"
+     id="rect3985" />
+  <path
+     style="color:#000000;fill:#000000;stroke:#000000;stroke-width:200;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;fill-opacity:1;fill-rule:nonzero"
+     d="M 786.74517,1079.7789 1452.6006,-125.83532"
+     id="path3990-9"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+</svg>

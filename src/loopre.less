@@ -1,0 +1,539 @@
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.placeholder(@styles) {
+  &::-webkit-input-placeholder { @styles(); }
+  &:-moz-placeholder { @styles(); }
+  &::-moz-placeholder { @styles(); }
+  &:-ms-input-placeholder { @styles(); }
+}
+
+@level-bg: #ccc;
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  .no-select;
+}
+
+h2 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 30px;
+  font-family: sans-serif;
+  color: #666;
+  text-shadow: 0 2px 4px #ccc;
+}
+
+.icon {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+button, select, input {
+  background: none;
+  border: none;
+  font-size: inherit;
+  box-sizing: content-box;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.option-group {
+  display: inline-block;
+  box-shadow: 0 0 .15em gray inset;
+  border-radius: .3em;
+  padding: 0;
+
+  input {
+    display: none;
+  }
+
+  label {
+    display: inline-block;
+    padding: .25em .5em;
+    border-left: 1px solid #ddd;
+    cursor: pointer;
+
+    &.on {
+      background-color: #eee;
+      box-shadow: 0 0 .3em gray inset;
+      border-radius: .3em;
+    }
+
+    &.on + label, &:first-child {
+      border-left-color: transparent;
+    }
+
+    span {
+      font-size: .65em;
+    }
+  }
+}
+
+
+.volume-control {
+  @level-fg: green;
+  @mute-fg: red;
+  @level-fg-mute: gray;
+
+  &, .icon, .level {
+    display: inline-block;
+  }
+
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  .icon {
+    width: 26em / 24;
+    height: 1em;
+    background-size: cover;
+    background-image: data-uri('img/volume-up.svg');
+    vertical-align: bottom;
+  }
+
+  .level {
+    position: relative;
+    border-bottom: 1em / 12 solid @level-fg;
+    margin-left: 1em / 6;
+    z-index: 0;
+
+    &:after, .active:after {
+      top: 0;
+      left: 0;
+      content: '';
+      display: block;
+      border-bottom: 11em / 12 solid @level-bg;
+      border-left: 4em solid transparent;
+    }
+
+    &:after {
+      position: absolute;
+      z-index: -1;
+    }
+
+    .active {
+      overflow: hidden;
+
+      &:after {
+        border-bottom-color: @level-fg;
+      }
+    }
+  }
+
+  &.muted {
+    .icon {
+      background-image: data-uri('img/volume-off.svg');
+    }
+
+    .level {
+      border-bottom-color: @mute-fg;
+
+      .active:after {
+        border-bottom-color: @level-fg-mute;
+      }
+    }
+  }
+}
+
+header, footer {
+  position: absolute;
+  padding: .65em .5em;
+  background: linear-gradient(to bottom, #fcfcfc 50%, #f0f0f0);
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 10;
+
+  & > * {
+    display: inline-block;
+    margin: -.5em .25em;
+    padding: .25em;
+    vertical-align: middle;
+  }
+}
+
+header {
+  top: 0;
+  left: 0;
+  right: 0;
+  box-shadow: 0 -5px 5px 5px gray;
+  overflow: hidden;
+
+  font-size: 26px;
+
+  h1 {
+    float: left;
+    font-family: sans-serif;
+    font-size: .85em;
+  }
+
+  .volume-control {
+    float: right;
+    padding-right: 0;
+  }
+
+  .metronome-toggle {
+    width: 1em;
+    height: 1em;
+    background-size: 1em 1em;
+    background-image: data-uri('img/metronome.svg');
+    cursor: pointer;
+    float: right;
+
+    &.on {
+      background-color: #eee;
+      box-shadow: 0 0 .3em gray inset;
+      border-radius: .15em;
+      transition: background ease-out .075s;
+    }
+
+    &.tick {
+      background-color: #efe;
+    }
+
+    input {
+      opacity: 0;
+    }
+  }
+
+  .timing-info {
+    float: right;
+    line-height: 1em;
+    margin-right: 0;
+    color: gray;
+    opacity: 0;
+    transition: opacity .15s;
+
+    .looper.started & {
+      opacity: 1;
+    }
+
+    & > span {
+      margin: 0 .25em;
+      font-size: .70em;
+    }
+
+    .unit {
+      font-size: .65em;
+      margin-left: .35em;
+    }
+  }
+}
+
+footer {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0 5px 5px 5px gray;
+  font-size: 26px;
+
+  .record {
+    margin-right: 0;
+    width: 23px;
+    height: 23px;
+    background-size: 1em 1em;
+    background-image: data-uri('img/record.svg');
+    cursor: pointer;
+
+    &.recording {
+      background-image: data-uri('img/recording.svg');
+    }
+  }
+
+  .levels-meter {
+    @level-fg: darken(desaturate(red, 20%), 5%);
+
+    display: inline-block;
+    width: 200px;
+
+    .container {
+      position: relative;
+      background: @level-bg;
+      height: 10px;
+      margin-bottom: 3px;
+      border-right: 3px solid transparent;
+      transition: border-right-color 0.5s;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &.clip {
+        border-right-color: red;
+        transition: border-right-color 0s;
+      }
+    }
+
+    .bar {
+      position: absolute;
+      left: 0;
+      height: 100%;
+
+      &.max {
+        z-index: 1;
+        background: @level-fg;
+      }
+
+      &.avg {
+        z-index: 2;
+        background: darken(@level-fg, 15%);
+      }
+    }
+  }
+
+  .latency {
+    float: right;
+
+    .value {
+      display: block;
+      font-size: .45em;
+      color: darkred;
+    }
+
+    .label {
+      font-size: .30em;
+    }
+  }
+
+  .snap, .record-length {
+    position: relative;
+    border-radius: .3em;
+    box-shadow: 0 0 .15em gray inset;
+    padding: .25em .5em;
+    cursor: pointer;
+
+    label {
+      font-size: .55em;
+      margin-right: .25em;
+      color: gray;
+    }
+
+    .value {
+      font-size: .65em;
+
+      &:after {
+        content: '\25b2';
+        font-size: .65em;
+        vertical-align: .1em;
+        margin-left: .35em;
+        color: gray;
+      }
+    }
+
+    select {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      font-size: .65em;
+      opacity: 0;
+    }
+  }
+}
+
+.loops {
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+
+  li {
+    display: inline-block;
+    list-style-type: none;
+    margin: 10px;
+    vertical-align: top;
+  }
+}
+
+.loop {
+  position: relative;
+  border-radius: 100%;
+  border: 2px solid transparent;
+  transition: background .5s;
+  width: 200px;
+  height: 200px;
+
+  &:hover {
+    background: #eee;
+    border: 2px solid #ddd;
+  }
+
+  .menu-trigger {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    background: white;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 100%;
+    box-sizing: border-box;
+    z-index: 10;
+
+    & > form > input {
+      pointer-events: none;
+      border-radius: 3px;
+      transition: all .5s;
+    }
+
+    button[type='submit'] {
+      // hidden submit button for form enter key behavior
+      display: none;
+    }
+  }
+
+  &.editing {
+    .menu-trigger > form > input {
+      pointer-events: auto;
+      box-shadow: 0 1px 5px fade(black, 50%);
+      background: white;
+    }
+  }
+
+  &:hover .menu-trigger {
+    border: 2px solid #ddd;
+  }
+
+  .keyshadow(@color) {
+    @o: 2px;
+    @b: 2px;
+    text-shadow:
+      -@o -@o @b @color,
+       @o -@o @b @color,
+      -@o  @o @b @color,
+       @o  @o @b @color;
+  }
+
+  .key {
+    position: absolute;
+    top: -30px;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    width: 100%;
+    @size: 40px;
+    height: @size;
+    font-size: @size;
+    font-weight: bold;
+    color: white;
+    .keyshadow(blue);
+    .placeholder({
+      color: white;
+    });
+    z-index: 20;
+  }
+
+  &.muted .key {
+    .keyshadow(#999)
+  }
+
+  &.recording .key {
+    .keyshadow(red)
+  }
+
+  .label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 55px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .radial-clock {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+  }
+
+  .radial-clock.status {
+    path {
+      fill: rgba(0, 0, 255, .5);
+      transition: fill 0.5s;
+    }
+  }
+
+  &.muted .radial-clock.status path {
+    fill: fade(#999, 50%);
+  }
+
+  &.recording .radial-clock.status path {
+    fill: rgba(255, 0, 0, .5);
+  }
+
+  .radial-clock.pending {
+    z-index: 3;
+
+    path {
+      fill: rgba(230, 140, 0, .35);
+    }
+  }
+
+  .radial-menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
+    border-radius: 100%;
+    background: fade(#eee, 65%);
+
+    opacity: 0;
+    transition: opacity .15s;
+
+    text {
+      font-weight: bold;
+      letter-spacing: .05em;
+    }
+
+    .item {
+      cursor: pointer;
+
+      path {
+        fill: transparent;
+      }
+
+      path, text {
+        transition: fill 0.15s;
+      }
+
+      &:hover {
+        text {
+          fill: white;
+        }
+
+        path {
+          fill: fade(#666, 80%);
+        }
+      }
+    }
+  }
+
+  &.menu-showing .radial-menu {
+    opacity: 1;
+    transition: opacity .5s .25s;
+  }
+
+  &.confirm-archive .radial-menu .item.archive:hover path {
+    fill: darkred;
+  }
+}
