@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
 var React = require('react/addons')
+
 var RadialClock = require('./radialclock.jsx')
 var RadialWave = require('./radialwave.jsx')
 var RadialMenu = require('./radialmenu.jsx')
-
 var clamp = require('./utils').clamp
 var quantize = require('./utils').quantize
 
