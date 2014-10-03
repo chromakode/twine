@@ -13,7 +13,8 @@ var dest = './build'
 
 var jsModules = {
   './src/index.js': 'loopre.min.js',
-  './src/b64worker.js': 'b64worker.min.js'
+  './src/b64worker.js': 'b64worker.min.js',
+  './src/wavworker.js': 'wavworker.min.js'
 }
 
 gulp.task('js', function(){

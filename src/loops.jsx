@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react/addons')
 var _ = require('lodash')
+var saveFile = require('filesaver.js')
 
 var Loop = require('./loop.jsx')
 var VolumeControl = require('./volumecontrol.jsx')
@@ -145,7 +146,18 @@ module.exports = Loops = React.createClass({
       case 'unmute':
         this.props.looper.unmuteLoop(loopId)
         break
+      case 'save':
+        this.saveLoop(loopId)
+        break
     }
+  },
+
+  saveLoop: function(loopId) {
+    this.props.looper.exportLoopAudio(loopId).then(function(wavBlob) {
+      var loop = this.props.looper.loops[loopId]
+      var name = loop.label || loopId
+      saveFile(wavBlob, name + '.wav')
+    }.bind(this))
   },
 
   onLoopRename: function(loopId, fields) {

@@ -7,6 +7,7 @@ var audio = require('./audio')
 var Clock = require('./clock')
 var Metronome = require('./metronome')
 var Levels = require('./levels')
+var wavAsync = require('./wavasync')
 var clamp = require('./utils').clamp
 
 
@@ -391,6 +392,10 @@ _.extend(Looper.prototype, EventEmitter.prototype, {
     } else {
       this.recordLoop()
     }
+  },
+
+  exportLoopAudio: function(id) {
+    return wavAsync(this.loops[id]._buffer)
   },
 
   _playLoop: function(id, startBeat) {

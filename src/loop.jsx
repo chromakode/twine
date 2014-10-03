@@ -195,7 +195,8 @@ module.exports = Loop = React.createClass({
     var menuItems = [
       'rename',
       'archive',
-      loop._muted ? 'unmute' : 'mute'
+      loop._muted ? 'unmute' : 'mute',
+      'save'
     ]
 
     // encode as a string so that PureRenderMixin can compare easily. maybe someday I'll encode these as child elements
