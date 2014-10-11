@@ -9,7 +9,7 @@ Levels = module.exports = function(ctx, inNode) {
   this.inNode = inNode
   this.channelCount = this.inNode.numberOfOutputs
   this.analyseNode = this.ctx.createScriptProcessor(0, this.channelCount, this.channelCount)
-  this.channelCount = this.analyseNode.numberOfInputs
+  this.bufferSize = this.analyseNode.bufferSize
   this.analyseNode.addEventListener('audioprocess', this._update.bind(this))
   this.inNode.connect(this.analyseNode)
   this.analyseNode.connect(this.ctx.destination)

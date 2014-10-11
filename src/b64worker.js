@@ -10,9 +10,30 @@ cmds.decode = function(str) {
 }
 
 cmds.encode = function(arrays) {
-  return arrays.map(function(array) {
+  var totalLen = 0
+  for (var i = 0; i < arrays.length; i++) {
+    totalLen += arrays[i][0].byteLength
+  }
+
+  var channelCount = arrays[0].length
+  var channelDatas = []
+  for (var c = 0; c < channelCount; c++) {
+    channelDatas.push(new Uint8Array(totalLen))
+  }
+
+  var pos = 0
+  for (var i = 0; i < arrays.length; i++) {
+    for (var c = 0; c < channelCount; c++) {
+      var buffer = arrays[i][c]
+      var view = new Uint8Array(buffer)
+      channelDatas[c].set(view, pos)
+      pos += view.length
+    }
+  }
+
+  return channelDatas.map(function(array) {
     // kludge the array to be the right length, since b64ab doesn't know about the typed array offset
-    return b64ab.encode(new Uint8Array(array.buffer, array.byteOffset, array.length * 4))
+    return b64ab.encode(array)
   }).join('|')
 }
 

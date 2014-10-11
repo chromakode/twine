@@ -28,8 +28,13 @@ Client = module.exports = function(channel, ui, looper) {
   this.id = uuid.v1().replace(/-/g, '')
   this.timeSync = new ServerTimeSync(this.looper.clock, this)
 
+  // TODO: get from server?
+  this.chunkSize = Math.ceil(64 * 1024 / this.looper.levels.bufferSize / 4)
+
   // worker -> loop id mapping for async encode/decode
+  this._sendBuffers = {}
   this._workers = {}
+  this._fetches = {}
 }
 
 _.extend(Client.prototype, {
@@ -69,6 +74,25 @@ _.extend(Client.prototype, {
     this.timeSync.start()
   },
 
+  _getWorker: function(id) {
+    var worker = this._workers[id]
+    if (!worker) {
+      worker = this._workers[id] = new B64Worker()
+    }
+    return worker
+  },
+
+  _releaseWorker: function(id) {
+    var worker = this._workers[id]
+    if (!worker) {
+      return
+    }
+
+    return worker.settle().then(function() {
+      delete this._workers[id]
+    }.bind(this))
+  },
+
   onLocalStateChange: function(props) {
     props = stripPrivate(props)
     if (_.isEmpty(props)) {
@@ -83,15 +107,42 @@ _.extend(Client.prototype, {
     this.looper.setState(props, true)
   },
 
-  onStreamRecording: function(id, channelDatas) {
-    var worker = new B64Worker()
-    worker.encode(channelDatas).then(function(str) {
-      this.ivy.send(this.channel + '/loop/' + id + '/audio', str)
+  _sendLoopBuffer: function(id, callback) {
+    this._getWorker(id).encode(this._sendBuffers[id]).then(function(str) {
+      this.ivy.sendLarge(this.channel + '/loop/' + id + '/audio', str, callback)
     }.bind(this))
   },
 
+  onStreamRecording: function(id, channelDatas) {
+    if (!_.has(this._sendBuffers, id)) {
+      this._sendBuffers[id] = []
+    }
+
+    channelDatas = channelDatas.map(function(array) {
+      return array.buffer.slice(0)
+    })
+    this._sendBuffers[id].push(channelDatas)
+
+    if (this._sendBuffers[id].length >= this.chunkSize) {
+      this._sendLoopBuffer(id)
+      delete this._sendBuffers[id]
+    }
+  },
+
   onStreamFinishRecording: function(id, bufferInfo) {
-    this.ivy.send(this.channel + '/loop/' + id + '/audio', JSON.stringify(bufferInfo))
+    var finish = function() {
+      this.ivy.send(this.channel + '/loop/' + id + '/audio', JSON.stringify(bufferInfo))
+      delete this._sendBuffers[id]
+    }.bind(this)
+
+    this._releaseWorker(id).then(function() {
+      if (_.has(this._sendBuffers, id)) {
+        // flush the chunk buffer
+        this._sendLoopBuffer(id, finish)
+      } else {
+        finish()
+      }
+    }.bind(this))
   },
 
   onLocalLoopChange: function(id, props, loop) {
@@ -116,20 +167,26 @@ _.extend(Client.prototype, {
       console.debug('loop/control', id, props)
       this.looper.receiveLoopState(id, props, true)
     } else if (kind == 'audio') {
-
-      var worker = this._workers[id]
-      if (!worker) {
-        worker = this._workers[id] = new B64Worker()
+      if (data.fetch) {
+        if (!this._fetches[id]) {
+          this._fetches[id] = []
+        }
+        this._fetches[id].push(new Promise(function(resolve) {
+          data.fetch(resolve)
+        }))
+        return
       }
 
       if (data[0] == '{') {
-        worker.settle().then(function() {
-          console.debug('loop/audio complete', id)
-          this.looper.finishReceiveLoopAudio(id, JSON.parse(data))
-          delete this._workers[id]
+        Promise.all(this._fetches[id] || []).then(function() {
+          delete this._fetches[id]
+          this._releaseWorker(id).then(function() {
+            console.debug('loop/audio complete', id)
+            this.looper.finishReceiveLoopAudio(id, JSON.parse(data))
+          }.bind(this))
         }.bind(this))
       } else {
-        worker.decode(data).then(function(arrays) {
+        this._getWorker(id).decode(data).then(function(arrays) {
           this.looper.receiveLoopAudio(id, arrays)
         }.bind(this))
       }
