@@ -328,8 +328,6 @@ _.extend(Looper.prototype, EventEmitter.prototype, {
         this.archiveLoop(loop.prevLoop)
         this._onAudio(audio)
       }
-
-      this.playLoop(recordId, loop._recordEndBeat)
     }
   },
 
@@ -366,8 +364,9 @@ _.extend(Looper.prototype, EventEmitter.prototype, {
 
     if (this.state._recordMode == 'continuous') {
       this.setLoopState(id, {_muted: true})
-      this.playLoop(id, endBeat)
     }
+
+    this.playLoop(id, endBeat)
 
     this._onAudio(this._lastAudio)
 

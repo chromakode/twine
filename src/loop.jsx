@@ -128,15 +128,17 @@ module.exports = Loop = React.createClass({
 
     // progress radial clock
     var percent
-    if (loop.recording && loop._buffer) {
-      percent = loop._recordSample / loop._buffer.length
-    } else if (!loop.stopBeat || loop.stopBeat > curBeat) {
+    if (!loop.stopBeat || loop.stopBeat > curBeat) {
       if (loop.startBeat < curBeat) {
         percent = ((curBeat - loop.startBeat) / loop.beats) % 1
       } else if (loop._prevStartBeat < curBeat && loop._prevStopBeat > curBeat) {
         percent = ((curBeat - loop._prevStartBeat) / loop.beats) % 1
       }
     }
+    if (!percent && loop.recording && loop._buffer) {
+      percent = loop._recordSample / loop._buffer.length
+    }
+
     percent = clamp(0, percent, 1)
     percent = percent && quantize(percent, 360)
 
