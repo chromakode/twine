@@ -40,14 +40,14 @@ _.extend(Client.prototype, {
 
   onReady: function() {
     this.looper.on('state:change', this.onLocalStateChange.bind(this))
-    this.ivy.load(this.channel + '/state', 1)
+    this.ivy.load(this.channel + '/state', {count: 1})
     this.ivy.on(this.channel + '/state', this.onRemoteStateChange.bind(this))
 
     this.looper.on('loop:record-progress', this.onStreamRecording.bind(this))
     this.looper.on('loop:record-finish', this.onStreamFinishRecording.bind(this))
     this.looper.on('loop:change', this.onLocalLoopChange.bind(this))
     this.looper.on('loop:play', this.ensureLoopLoaded.bind(this))
-    this.ivy.load(this.channel + '/loop/*/control', 1)
+    this.ivy.load(this.channel + '/loop/*/control', {count: 1})
     this.ivy.on(this.channel + '/loop', this.onRemoteLoopChange.bind(this))
 
     this.ivy.subscribe(this.channel)
